@@ -38,4 +38,17 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         bullet.setRadius(1);
         return bullet;
     }
+
+    @Override
+    public void collide(World world, Entity collider, Entity collidee) {
+        Bullet collideeBullet;
+
+        try{
+            collideeBullet = (Bullet) collidee;
+        } catch (ClassCastException e){ // If the entity is not an asteroid, return
+            return;
+        }
+
+        world.removeEntity(collideeBullet);
+    }
 }

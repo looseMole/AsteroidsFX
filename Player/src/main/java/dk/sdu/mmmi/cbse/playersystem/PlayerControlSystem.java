@@ -73,6 +73,17 @@ public class PlayerControlSystem implements IEntityProcessingService {
         }
     }
 
+    @Override
+    public void collide(World world, Entity collider, Entity collidee) {
+        if(collider instanceof Player){
+            world.removeEntity(collider);
+        }
+
+        else if(collidee instanceof Player){
+            world.removeEntity(collidee);
+        }
+    }
+
     private Collection<? extends BulletSPI> getBulletSPIs() {
         return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }

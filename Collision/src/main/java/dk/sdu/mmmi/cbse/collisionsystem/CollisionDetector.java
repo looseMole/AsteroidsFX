@@ -1,9 +1,14 @@
 package dk.sdu.mmmi.cbse.collisionsystem;
 
+import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+
+import java.util.ServiceLoader;
+
+import static java.util.stream.Collectors.toList;
 
 public class CollisionDetector implements IPostEntityProcessingService {
 
@@ -24,9 +29,9 @@ public class CollisionDetector implements IPostEntityProcessingService {
                 // CollisionDetection
                 if (this.collides(entity1, entity2)) { // TODO: Implement a more efficient collision detection algorithm
                     // TODO: Make the entities themselves react to the collision
-
-                    world.removeEntity(entity1);
-                    world.removeEntity(entity2);
+                    for(IEntityProcessingService service : ServiceLoader.load(IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList())) {
+                        service.collide(world, entity1, entity2);
+                    }
                 }
             }
         }

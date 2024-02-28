@@ -48,6 +48,17 @@ public class EnemyControlSystem implements IEntityProcessingService {
         }
     }
 
+    @Override
+    public void collide(World world, Entity collider, Entity collidee) {
+        if(collider instanceof Enemy){
+            world.removeEntity(collider);
+        }
+
+        else if(collidee instanceof Enemy){
+            world.removeEntity(collidee);
+        }
+    }
+
     private Collection<? extends BulletSPI> getBulletSPIs() {
         return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
