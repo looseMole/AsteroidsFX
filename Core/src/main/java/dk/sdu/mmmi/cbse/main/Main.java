@@ -73,6 +73,7 @@ public class Main extends Application {
 
         // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : getPluginServices()) {
+            System.out.println("Plugin found: " + iGamePlugin.getClass().getSimpleName());
             iGamePlugin.start(gameData, world);
         }
         for (Entity entity : world.getEntities()) {
