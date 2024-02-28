@@ -18,6 +18,7 @@ public class AsteroidSplitterImpl implements IAsteroidSplitter {
     public void createSplitAsteroid(Entity e, World world) {
         Entity asteroid1 = createHalfAsteroid(e);
         Entity asteroid2 = createHalfAsteroid(e);
+        world.removeEntity(e);
         if(asteroid1 != null){world.addEntity(asteroid1);}
         if(asteroid2 != null){world.addEntity(asteroid2);}
     }
@@ -25,13 +26,13 @@ public class AsteroidSplitterImpl implements IAsteroidSplitter {
     private Entity createHalfAsteroid(Entity originalAsteroid) {
         float originalSize = originalAsteroid.getRadius();
 
-        if(originalSize <= 4) {
+        if((int)(originalSize/2) <= 4) {
             return null;
         }
 
         Entity asteroid = new Asteroid();
         Random rnd = new Random();
-        int size = rnd.nextInt((int)originalSize/2) + 5;
+        int size = rnd.nextInt((int)originalSize/2);
         asteroid.setPolygonCoordinates(size, -size, -size, -size, -size, size, size, size);
         asteroid.setX(originalAsteroid.getX());
         asteroid.setY(originalAsteroid.getY());
