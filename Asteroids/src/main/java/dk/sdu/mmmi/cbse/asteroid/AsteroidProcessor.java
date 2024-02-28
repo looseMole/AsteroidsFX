@@ -41,6 +41,23 @@ public class AsteroidProcessor implements IEntityProcessingService {
 
     }
 
+    @Override
+    public void collide(World world, Entity collider, Entity collidee) {
+        // If both, or neither entities is asteroids, return:
+        if(!((collider instanceof Asteroid) || (collidee instanceof Asteroid)) || ((collider instanceof Asteroid) && (collidee instanceof Asteroid))){
+            return;
+        }
+
+        Asteroid asteroidToSplit;
+        if(collider instanceof Asteroid){
+            asteroidToSplit = (Asteroid) collider;
+        } else { // Safe to cast, as we have already checked that there is an Asteroid, and whether it is the other entity.
+            asteroidToSplit = (Asteroid) collidee;
+        }
+
+        asteroidSplitter.createSplitAsteroid(asteroidToSplit, world);
+    }
+
     /**
      * Dependency Injection using OSGi Declarative Services
      */
