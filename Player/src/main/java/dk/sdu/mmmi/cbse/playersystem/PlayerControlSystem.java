@@ -38,6 +38,15 @@ public class PlayerControlSystem implements IEntityProcessingService {
                     world.addEntity(bullet); // Add the bullet to the world
                 });
             }
+            if(gameData.getKeys().isDown(GameKeys.SPACE)) {                
+                getBulletSPIs().stream().findFirst().ifPresent(
+                        spi -> {world.addEntity(spi.createBullet(player, gameData));}
+                );
+            }
+            
+        if (player.getX() < 0) {
+            player.setX(1);
+        }
 
             if (player.getX() < 0) {
                 player.setX(1);
@@ -56,6 +65,11 @@ public class PlayerControlSystem implements IEntityProcessingService {
             }
 
 
+        if (player.getY() > gameData.getDisplayHeight()) {
+            player.setY(gameData.getDisplayHeight()-1);
+        }
+
+                                        
         }
     }
 
