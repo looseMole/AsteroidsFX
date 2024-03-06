@@ -26,17 +26,17 @@ public class AsteroidSplitterImpl implements IAsteroidSplitter {
     private Entity createHalfAsteroid(Entity originalAsteroid) {
         float originalSize = originalAsteroid.getRadius();
 
-        if((int)(originalSize/2) <= 4) {
+        if((originalSize/2) <= 4) {
             return null;
         }
 
         Entity asteroid = new Asteroid();
         Random rnd = new Random();
-        int size = rnd.nextInt((int)originalSize/2);
+        double size = rnd.nextDouble(originalSize/(2.5), originalSize/2);
         asteroid.setPolygonCoordinates(size, -size, -size, -size, -size, size, size, size);
         asteroid.setX(originalAsteroid.getX());
         asteroid.setY(originalAsteroid.getY());
-        asteroid.setRadius(size);
+        asteroid.setRadius((float)size);
         asteroid.setRotation((originalAsteroid.getRotation()+rnd.nextInt(180)));
 
         // Attempt at fixing asteroid colliding with itself infinitely.
