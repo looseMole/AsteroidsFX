@@ -1,4 +1,4 @@
-package com.loosemole;
+package com.loosemole.enemy;
 
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
