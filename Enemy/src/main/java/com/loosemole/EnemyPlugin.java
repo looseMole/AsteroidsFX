@@ -1,4 +1,4 @@
-package com.loosemole.enemy;
+package com.loosemole;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
@@ -14,7 +14,6 @@ public class EnemyPlugin implements IGamePluginService {
     @Override
     public void start(GameData gameData, World world) {
         this.enemy = createEnemyShip(gameData);
-        SplitPackageClass.splitPackageMethod(); // This method is only called, to demonstrate a split package.
         world.addEntity(enemy);
     }
 
