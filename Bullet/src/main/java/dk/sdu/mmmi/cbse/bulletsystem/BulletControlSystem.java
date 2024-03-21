@@ -11,7 +11,7 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 public class BulletControlSystem implements IEntityProcessingService, BulletSPI {
 
     /**
-     * This method is called every frame. It updates the all bullet's movement, and removes any which are outside the game borders.
+     * This method is called every frame. It updates all the bullet's movement, and removes any which are outside the game borders.
      * @param gameData - The game data object
      * @param world - The game world object containing all entities
      */
@@ -52,21 +52,19 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
 
     /**
      * This method is called whenever an entity collides with another entity.
-     * If the "second" entity in the collision is a bullet, the bullet is removed.
+     * If either entity in the collision is a bullet, the bullet is removed.
      * @param world - The game world object containing all entities
      * @param collider - The entity which collided with another entity
      * @param collidee - The entity which was collided with
      */
     @Override
     public void collide(World world, Entity collider, Entity collidee) {
-        Bullet collideeBullet;
-
-        try{
-            collideeBullet = (Bullet) collidee;
-        } catch (ClassCastException e){ // If the entity is not a bullet, return
-            return;
+        if(collider instanceof Bullet){
+            world.removeEntity(collider);
         }
 
-        world.removeEntity(collideeBullet);
+        else if(collidee instanceof Bullet){
+            world.removeEntity(collidee);
+        }
     }
 }
