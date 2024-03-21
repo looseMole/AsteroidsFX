@@ -15,6 +15,12 @@ public class CollisionDetector implements IPostEntityProcessingService {
     public CollisionDetector() {
     }
 
+    /**
+     * This method is called every frame. It processes all entities in the world, and checks if any of their radius' overlap.
+     * If they do, it calls the collide method on all services implementing IEntityProcessingService.
+     * @param gameData - The game data object
+     * @param world - The game world object containing all entities
+     */
     @Override
     public void process(GameData gameData, World world) {
         // two for loops for all entities in the world
@@ -37,6 +43,12 @@ public class CollisionDetector implements IPostEntityProcessingService {
 
     }
 
+    /**
+     * This method checks if two entities' radius overlap (whether the entities collide).
+     * @param entity1 - The first entity
+     * @param entity2 - The second entity
+     * @return - True if the entities collide, false otherwise
+     */
     public Boolean collides(Entity entity1, Entity entity2) {
         float dx = (float) entity1.getX() - (float) entity2.getX();
         float dy = (float) entity1.getY() - (float) entity2.getY();
