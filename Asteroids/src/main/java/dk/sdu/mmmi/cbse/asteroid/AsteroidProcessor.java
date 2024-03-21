@@ -11,6 +11,12 @@ public class AsteroidProcessor implements IEntityProcessingService {
 
     private IAsteroidSplitter asteroidSplitter = new AsteroidSplitterImpl();
 
+    /**
+     * This method is called every frame. It updates the asteroid movement, and checks if they are out of bounds.
+     * If they are, they are moved back in bounds.
+     * @param gameData - The game data object
+     * @param world - The game world object containing all entities
+     */
     @Override
     public void process(GameData gameData, World world) {
 
@@ -41,9 +47,16 @@ public class AsteroidProcessor implements IEntityProcessingService {
 
     }
 
+    /**
+     * This method is called whenever an entity collides with another entity.
+     * If one of the entities in the collision is an asteroid, it calls the createSplitAsteroid method on the asteroidSplitter, for that entity.
+     * @param world - The game world object containing all entities
+     * @param collider - The entity which collided with another entity
+     * @param collidee - The entity which was collided with
+     */
     @Override
     public void collide(World world, Entity collider, Entity collidee) {
-        // If both, or neither entities is asteroids, return:
+        // If neither, or both entities is asteroids, return:
         if(!((collider instanceof Asteroid) || (collidee instanceof Asteroid)) || ((collider instanceof Asteroid) && (collidee instanceof Asteroid))){
             return;
         }
