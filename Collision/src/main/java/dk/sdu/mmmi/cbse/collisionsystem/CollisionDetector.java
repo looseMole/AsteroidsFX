@@ -5,11 +5,13 @@ import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import org.springframework.stereotype.Component;
 
 import java.util.ServiceLoader;
 
 import static java.util.stream.Collectors.toList;
 
+@Component
 public class CollisionDetector implements IPostEntityProcessingService {
 
     public CollisionDetector() {
