@@ -30,6 +30,8 @@ class CollisionDetectorTest {
     @Test
     void process() {
         // Add entities to the world
+        // TODO: Create an interface for the test, implementing IEntityProcessingService, with a detectable reaction to Collide()
+        // A further solution to this, could be to mock ServiceLoader.load()
         Entity entity1 = new Entity();
         world.addEntity(entity1);
         world.addEntity(entity1);
