@@ -7,10 +7,8 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ServiceLoader;
-
-import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class CollisionDetectorTest {
     GameData gameData;
@@ -20,7 +18,7 @@ class CollisionDetectorTest {
     @BeforeEach
     void setUp() {
         // Create a CollisionDetector object to test.
-        // Create a GameData and World object for the process method
+        // Create a GameData and World object for the testCollision method
         this.collisionDetector = new CollisionDetector();
 
         this.gameData = new GameData();
@@ -28,30 +26,40 @@ class CollisionDetectorTest {
     }
 
     @Test
-    void process() {
-        // Add entities to the world
-        // TODO: Create an interface for the test, implementing IEntityProcessingService, with a detectable reaction to Collide()
-        // A further solution to this, could be to mock ServiceLoader.load()
+    void testCollision() {
+        // Arrange
+        int x = 0;
+        int y = 0;
         Entity entity1 = new Entity();
-        world.addEntity(entity1);
-        world.addEntity(entity1);
+        entity1.setX(x);
+        entity1.setY(y);
+        entity1.setRadius(3);
 
-        // Call the process method
+        Entity entity2 = new Entity();
+        entity2.setX(x);
+        entity2.setY(y);
+        entity2.setRadius(3);
+
+        world.addEntity(entity1);
+        world.addEntity(entity2);
+//        System.out.println(world.getEntities().size());
+
+        // Mock an entity implementing the IEntityProcessingService interface, removing an entity from world if collide is called.
+        IEntityProcessingService entityProcessingService = mock(IEntityProcessingService.class);
+        doAnswer(invocation -> {
+//            System.out.println("Collide method called");
+            world.removeEntity(entity1);
+            return null;
+        }).when(entityProcessingService).collide(world, entity1, entity2);
+
+        // Act
+        // Call the testCollision method
+        collisionDetector.injectEntityProcessingService(entityProcessingService);
         collisionDetector.process(gameData, world);
+//        System.out.println(world.getEntities().size());
 
-        // Check if the collide method was called on all services implementing IEntityProcessingService
-        for(IEntityProcessingService service : ServiceLoader.load(IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList())) {
-            assertTrue(service.collideCalled);
-        }
-    }
-
-    @Test
-    void collides() {
-//        for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
-//            entityProcessorService.process(gameData, world);
-//        }
-//        for (IPostEntityProcessingService postEntityProcessorService : getPostEntityProcessingServices()) {
-//            postEntityProcessorService.process(gameData, world);
-//        }
+        // Assert
+        // Check if the collide method was called, by checking whether an entity has been removed from World.
+        assertEquals(1, world.getEntities().size());
     }
 }
