@@ -41,12 +41,12 @@ public class Main extends Application {
     private static List<ModuleLayer> layers;
 
     public static void main(String[] args) {
-        Path pluginsDir = Paths.get("plugins"); // Directory with plugins JARs
+        Path pluginsDir = Paths.get("plugins"); // What directory is this? Which plugins are saved here?
 
         // Search for plugins in the plugins directory
-        ModuleFinder pluginsFinder = ModuleFinder.of(pluginsDir); // Which directory?
+        ModuleFinder pluginsFinder = ModuleFinder.of(pluginsDir);
 
-        // Find all names of all found plugin modules
+        // Create list of names of the found plugin modules
         List<String> plugins = pluginsFinder
                 .findAll()
                 .stream()
@@ -64,6 +64,7 @@ public class Main extends Application {
         // Create a module layer for each plugin with its own classloader
 //        layers = new ArrayList<>();
 //        for (String plugin : plugins) {
+//            System.out.println("Loading plugin: " + plugin);
 //            Configuration pluginConfiguration = pluginsConfiguration.resolve(pluginsFinder, ModuleFinder.of(), List.of(plugin));
 //            ClassLoader pluginClassLoader = new URLClassLoader(new URL[0]);
 //            ModuleLayer layer = ModuleLayer.boot().defineModules(pluginConfiguration, mn -> pluginClassLoader);
