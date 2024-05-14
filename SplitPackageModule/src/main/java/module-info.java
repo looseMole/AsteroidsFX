@@ -1,6 +1,6 @@
-import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 
 module SplitPackageModule {
     requires Common;
-    provides IEntityProcessingService with com.loosemole.EnemyControlSystem;
+    provides IGamePluginService with com.loosemole.EnemyPlugin;
 }
