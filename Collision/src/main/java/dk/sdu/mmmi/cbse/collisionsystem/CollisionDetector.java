@@ -6,11 +6,14 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ServiceLoader;
 
 import static java.util.stream.Collectors.toList;
 
 public class CollisionDetector implements IPostEntityProcessingService {
+    private List<IEntityProcessingService> injectedEntityProcessingServices = new ArrayList<>();
 
     public CollisionDetector() {
     }
@@ -34,8 +37,13 @@ public class CollisionDetector implements IPostEntityProcessingService {
 
                 // CollisionDetection
                 if (this.collides(entity1, entity2)) { // TODO: Implement a more efficient collision detection algorithm
-                    for(IEntityProcessingService service : ServiceLoader.load(IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList())) {
+                    List<IEntityProcessingService> entityProcessingServices = new ArrayList<>();
+                    // Get all services implementing IEntityProcessingService from service loader
+                    entityProcessingServices.addAll(ServiceLoader.load(IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList()));
+                    entityProcessingServices.addAll(this.injectedEntityProcessingServices); // Added ability to inject services, for testing purposes.
+                    for(IEntityProcessingService service : entityProcessingServices) {
                         service.collide(world, entity1, entity2);
+//                        System.out.println("Collision detected");
                     }
                 }
             }
@@ -56,4 +64,7 @@ public class CollisionDetector implements IPostEntityProcessingService {
         return distance < (entity1.getRadius() + entity2.getRadius());
     }
 
+    public void injectEntityProcessingService(IEntityProcessingService service) {
+        this.injectedEntityProcessingServices.add(service);
+    }
 }
