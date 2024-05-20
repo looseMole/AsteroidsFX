@@ -1,0 +1,40 @@
+@startuml
+class Player {
+    - lives
+    - coordinates
+    + void move( destination )
+    + void shoot()
+}
+
+class Enemy{
+    - lives
+    - coordinates
+    + void move( destination )
+    + void shoot()
+}
+
+Player -down-> Bullet : fires
+Enemy -down-> Bullet : fires
+
+class Bullet {
+    - speed
+    - direction
+    - coordinates
+    + void move()
+}
+
+class Asteroid {
+    - speed
+    - direction
+    - coordinates
+    + void move()
+    - void split()
+}
+
+Bullet --> Asteroid : collides with
+Enemy <--> Asteroid : collides with
+Player <--> Asteroid : collides with
+
+Bullet <-up-> Player : collides with
+Bullet <-up-> Enemy : collides with
+@enduml
