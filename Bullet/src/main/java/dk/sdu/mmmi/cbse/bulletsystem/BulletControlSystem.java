@@ -4,7 +4,6 @@ import dk.sdu.mmmi.cbse.common.bullet.Bullet;
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
-import dk.sdu.mmmi.cbse.common.data.GameKeys;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
@@ -12,8 +11,9 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
 
     /**
      * This method is called every frame. It updates all the bullet's movement, and removes any which are outside the game borders.
+     *
      * @param gameData - The game data object
-     * @param world - The game world object containing all entities
+     * @param world    - The game world object containing all entities
      */
     @Override
     public void process(GameData gameData, World world) {
@@ -33,7 +33,8 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
 
     /**
      * This method creates a bullet entity, and sets its position, rotation and shape.
-     * @param shooter - The entity which shot the bullet
+     *
+     * @param shooter  - The entity which shot the bullet
      * @param gameData - The game data object
      * @return bullet - The freshly created bullet entity
      */
@@ -53,17 +54,16 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     /**
      * This method is called whenever an entity collides with another entity.
      * If either entity in the collision is a bullet, the bullet is removed.
-     * @param world - The game world object containing all entities
+     *
+     * @param world    - The game world object containing all entities
      * @param collider - The entity which collided with another entity
      * @param collidee - The entity which was collided with
      */
     @Override
     public void collide(World world, Entity collider, Entity collidee) {
-        if(collider instanceof Bullet){
+        if (collider instanceof Bullet) {
             world.removeEntity(collider);
-        }
-
-        else if(collidee instanceof Bullet){
+        } else if (collidee instanceof Bullet) {
             world.removeEntity(collidee);
         }
     }
