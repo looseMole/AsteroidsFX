@@ -5,17 +5,17 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
+
 import java.util.Random;
 
 /**
- *
- * @author corfixen
+ * @author corfixen (original)
  */
 public class AsteroidPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        Entity asteroid = createAsteroid(gameData);
+        Entity asteroid = createAsteroid();
         world.addEntity(asteroid);
     }
 
@@ -27,10 +27,10 @@ public class AsteroidPlugin implements IGamePluginService {
         }
     }
 
-    private Entity createAsteroid(GameData gameData) {
+    private Entity createAsteroid() {
         Entity asteroid = new Asteroid();
         Random rnd = new Random();
-        int size = rnd.nextInt(10,30);
+        int size = rnd.nextInt(10, 30);
         asteroid.setPolygonCoordinates(size, -size, -size, -size, -size, size, size, size);
         asteroid.setX(0);
         asteroid.setY(0);
