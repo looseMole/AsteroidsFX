@@ -1,0 +1,67 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+component Common {
+}
+
+component CommonAsteroids {
+}
+
+component CommonBullet {
+}
+
+CommonAsteroids -down-|> Common
+CommonBullet -down-|> Common
+
+component Core {
+}
+
+component Asteroids {
+}
+
+Asteroids -down-|> CommonAsteroids
+
+component Bullet {
+}
+
+Bullet -down-|> CommonBullet
+
+component Collision {
+}
+
+Collision -down-|> Common
+
+component Enemy {
+}
+
+Enemy -down-|> Common
+
+component Player {
+}
+
+Player -down-|> Common
+
+Asteroids ..> Common
+Bullet ..> Common
+Collision ..> Common
+Enemy ..> Common
+Player ..> Common
+
+
+' Lollipop relations between components
+Core -right-( IEntityProcessingService
+Core -right-( IGamePluginService
+Core -right-( IPostEntityProcessingService
+
+Asteroids -up- IEntityProcessingService
+Asteroids -left- IGamePluginService
+Bullet -left- IEntityProcessingService
+Bullet -left- IGamePluginService
+Enemy -left- IEntityProcessingService
+Enemy -left- IGamePluginService
+Player -left- IEntityProcessingService
+Player -left- IGamePluginService
+
+Collision -left- IPostEntityProcessingService
+
+@enduml
