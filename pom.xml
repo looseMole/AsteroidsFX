@@ -20,6 +20,7 @@
         <module>CommonAsteroids</module>
         <module>Asteroids</module>
         <module>Collision</module>
+        <module>Micro-scoring</module>
     </modules>
     <properties>
         <java>java</java>
