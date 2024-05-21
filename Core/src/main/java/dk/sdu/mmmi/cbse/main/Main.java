@@ -8,6 +8,11 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Collection;
 import java.util.Map;
 import java.util.ServiceLoader;
@@ -30,6 +35,9 @@ public class Main extends Application {
     private final World world = new World();
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
     private final Pane gameWindow = new Pane();
+    private Text asteroidText;
+    private int destroyedAsteroids;
+    private long timeOfNextWebRequest = 0L;
 
     public static void main(String[] args) {
         launch(Main.class);
@@ -37,9 +45,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage window) throws Exception {
-        Text text = new Text(10, 20, "Destroyed asteroids: 0");
+        this.destroyedAsteroids = 0;
+        this.asteroidText = new Text(10, 20, "Destroyed asteroids: " + destroyedAsteroids);
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
-        gameWindow.getChildren().add(text);
+        gameWindow.getChildren().add(asteroidText);
 
         Scene scene = new Scene(gameWindow);
         scene.setOnKeyPressed(event -> {
@@ -93,6 +102,7 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
                 update();
+                updateAsteroidText(now);
                 draw();
                 gameData.getKeys().update();
             }
@@ -106,6 +116,26 @@ public class Main extends Application {
         }
         for (IPostEntityProcessingService postEntityProcessorService : getPostEntityProcessingServices()) {
             postEntityProcessorService.process(gameData, world);
+        }
+    }
+
+    private void updateAsteroidText(long currentTimeNanos) {
+        if (currentTimeNanos > this.timeOfNextWebRequest) {
+            this.timeOfNextWebRequest = currentTimeNanos + 1000000000;
+
+            // Update the destroyed asteroids count with response from the scoring service
+            HttpClient httpClient = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/getscore"))
+                    .GET().build();
+            try {
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                this.destroyedAsteroids = Integer.parseInt(response.body());
+            } catch (IOException | InterruptedException e) {
+//                System.out.println("No response from scoring service");
+            }
+
+            this.asteroidText.setText("Destroyed asteroids: " + destroyedAsteroids);
         }
     }
 

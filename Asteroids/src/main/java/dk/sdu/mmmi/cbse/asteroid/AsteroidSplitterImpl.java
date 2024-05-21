@@ -5,10 +5,22 @@ import dk.sdu.mmmi.cbse.common.asteroids.IAsteroidSplitter;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.World;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Random;
 
 public class AsteroidSplitterImpl implements IAsteroidSplitter {
 
+    /**
+     * Splits an asteroid into two smaller asteroids. If the asteroid is too small, it is destroyed.
+     * NOTE: Supports external, REST-based scoring service.
+     *
+     * @param e     - The asteroid entity to split.
+     * @param world - The world in which the asteroid exists.
+     */
     @Override
     public void createSplitAsteroid(Entity e, World world) {
         Entity asteroid1 = createHalfAsteroid(e);
@@ -19,13 +31,24 @@ public class AsteroidSplitterImpl implements IAsteroidSplitter {
         }
         if (asteroid2 != null) {
             world.addEntity(asteroid2);
+        } else { // If asteroid has been destroyed, increase score.
+            try (HttpClient httpClient = HttpClient.newHttpClient()) {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create("http://localhost:8080/addscore"))
+                        .POST(HttpRequest.BodyPublishers.ofString("pointAmount=1")).build();
+                try {
+                    httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                } catch (IOException | InterruptedException ex) {
+                    //                System.out.println("No response from scoring service");
+                }
+            }
         }
     }
 
     private Entity createHalfAsteroid(Entity originalAsteroid) {
         float originalSize = originalAsteroid.getRadius();
 
-        if ((originalSize / 2) <= 4) {
+        if ((originalSize / 2) <= 4) { // Minimum size of asteroid. Destroyed if smaller.
             return null;
         }
 
