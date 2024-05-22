@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+-> Player : Move
+Enemy -> Enemy : Move
+-> Player : Shoot
+Player -> Bullet : Create
+Bullet -> Bullet : Move Bullet 1
+Enemy -> Enemy : Shoot
+Enemy -> Bullet : Create
+Bullet -> Bullet : Move Bullet 2
+Bullet -> Asteroid : Bullet 1 hit
+Asteroid -> Asteroid : Split
+Bullet -> Enemy : Bullet 2 hit
+Enemy -> Enemy : Die
+Asteroid -> Player : collide
+Player -> Player : Die
+Asteroid -> Asteroid : Split2
+<- Player : Game Over
+
+@enduml
